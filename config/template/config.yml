@@ -1,0 +1,8 @@
+mysql:
+  host: localhost
+  user: ss13
+  passwd: ss13
+  db: feedback
+
+discord:
+  staffserverID: "311889627495530496"

@@ -1,7 +1,12 @@
 import discord
 import Topic
 import math
+import pymysql
+import yaml
 from urllib.parse import parse_qs
+
+with open(".\config\config.yml", "r") as ymlfile:
+    cfg = yaml.load(ymlfile)
 
 client = discord.Client()
 
@@ -51,8 +56,39 @@ async def on_message(message):
 
         await client.send_message(message.channel, outmsg)
 
+    if explode[0] == "\U0001F441notes" and message.server.id == cfg['discord']['staffserverID']: # Check it's in the correct server
+        output = ""
+        ckey = ""
+        if len(explode) > 1:
+            ckey = explode[1]
+        else:
+            output = "No argument specified."
+            await client.send_message(message.channel, output)
+            return
+
+        db = pymysql.connect(cfg["mysql"]["host"], cfg["mysql"]["user"], cfg["mysql"]["passwd"], cfg["mysql"]["db"])
+        try:
+            with db.cursor() as cursor:
+                query = "SELECT `notetext`, `timestamp`, `adminckey`, `last_editor` FROM notes WHERE ckey LIKE \'" + ckey + "\'"
+                cursor.execute(query)
+                result = cursor.fetchall()
+                if result:
+                    output = "Notes for player " + ckey + "\n\n"
+                    for line in result:
+                        output += "``` " + line[0] + "\n"
+                        output += "added at " + str(line[1]) + " by " + line[2] + "\n\n"
+                        output += "```"
+                else:
+                    output = "No results found for " + ckey
+
+        finally:
+            await client.send_message(message.channel, output)
+            del(cursor)
+            db.close()
+
+
 @client.event
 async def on_ready():
     print('SS13 BOT ONLINE')
 
-client.run('')
+client.run('NDI4NjAzMDMwODEzMDE2MDY1.DZ1fMQ.YfbX-MyOlVP0e12lDFA0fN8td6o')
