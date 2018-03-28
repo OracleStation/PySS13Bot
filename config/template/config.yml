@@ -1,3 +1,6 @@
+botclient:
+  token: token
+
 mysql:
   host: localhost
   user: ss13
@@ -5,4 +8,4 @@ mysql:
   db: feedback
 
 discord:
-  staffserverID: "311889627495530496"
+  staffserverID: "0000000000000000000"

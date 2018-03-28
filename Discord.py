@@ -5,7 +5,7 @@ import pymysql
 import yaml
 from urllib.parse import parse_qs
 
-with open(".\config\config.yml", "r") as ymlfile:
+with open("config\config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile)
 
 client = discord.Client()
@@ -91,4 +91,4 @@ async def on_message(message):
 async def on_ready():
     print('SS13 BOT ONLINE')
 
-client.run('NDI4NjAzMDMwODEzMDE2MDY1.DZ1fMQ.YfbX-MyOlVP0e12lDFA0fN8td6o')
+client.run(cfg["botclient"]["token"])
