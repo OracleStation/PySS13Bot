@@ -20,7 +20,7 @@ class Topic:
     def send_topic(self, query):
         query = "?" + query + "&key=" + self.key
 
-        packet = bytearray([0, 0x83, 0, 0, 0, 0, 0, 0]) + query.encode('ascii') + bytearray([0])
+        packet = bytearray([0, 0x83, 0, 0, 0, 0, 0, 0, 0]) + query.encode('ascii') + bytearray([0])
         length = (len(packet) - 4).to_bytes(2, byteorder='little', signed=False)
 
         packet[2] = length[1]
