@@ -1,0 +1,11 @@
+botclient:
+  token: token
+
+mysql:
+  host: localhost
+  user: ss13
+  passwd: ss13
+  db: feedback
+
+discord:
+  staffserverID: "0000000000000000000"
