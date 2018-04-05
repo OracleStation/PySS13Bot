@@ -62,11 +62,7 @@ async def on_message(message):
         if len(explode) == 2:
             ckey = explode[1]
         elif len(explode) > 2:
-            for word in explode:
-                if word == explode[0]:
-                    continue
-                else:
-                    ckey = ckey + " " + word
+            ckey = " ".join(explode[1:])
         else:
             output = "No argument specified."
             await client.send_message(message.channel, output)
