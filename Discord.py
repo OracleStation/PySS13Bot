@@ -20,7 +20,7 @@ async def on_message(message):
     if message.content.startswith(eye) == False:
         return
 
-    explode = message.content.split(' ', 2)
+    explode = message.content.split(' ')
 
     if explode[0] == "\U0001F441status":
         await client.send_typing(message.channel)
@@ -59,8 +59,14 @@ async def on_message(message):
     if explode[0] == "\U0001F441notes" and message.server.id == cfg['discord']['staffserverID']: # Check it's in the correct server
         output = ""
         ckey = ""
-        if len(explode) > 1:
+        if len(explode) == 2:
             ckey = explode[1]
+        elif len(explode) > 2:
+            for word in explode:
+                if word == explode[0]:
+                    continue
+                else:
+                    ckey = ckey + " " + word
         else:
             output = "No argument specified."
             await client.send_message(message.channel, output)
