@@ -5,7 +5,7 @@ import pymysql
 import yaml
 from urllib.parse import parse_qs
 
-with open("config\config.yml", "r") as ymlfile:
+with open("config/config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile)
 
 client = discord.Client()
@@ -28,12 +28,11 @@ async def on_message(message):
             topic = Topic.Topic()
             response = parse_qs(topic.send_topic("status"))
 
-            outmsg = "**Version:** " + response["version"][0] + "\n"
-            outmsg += "**Gamemode:** " + response["mode"][0] + "\n"
+            outmsg = "**Gamemode:** " + response["mode"][0] + "\n"
             states = ["Starting Up", "Lobby", "Setting Up", "In Progress", "Finished"]
             outmsg += "**State:** " + states[int(response["gamestate"][0])] + "\n"
-            outmsg += "**Players:** " + response["admins"][0] + "\n"
-            outmsg += "**Admins:** " + response["active_players"][0] + "\n"
+            outmsg += "**Admins:** " + response["admins"][0] + "\n"
+            outmsg += "**Players:** " + response["active_players"][0] + "\n"
 
             roundseconds = int(response["round_duration"][0])
             roundhours = 12 + int(math.floor(roundseconds / 3600))
@@ -46,7 +45,7 @@ async def on_message(message):
 
         await client.send_message(message.channel, outmsg)
 
-    if explode[0] == "\U0001F441bwoink":
+    if explode[0] == "\U0001F441bwoink" and message.server.id == cfg['discord']['staffserverID']:
         await client.send_typing(message.channel)
         try:
             topic = Topic.Topic()
@@ -71,7 +70,7 @@ async def on_message(message):
         db = pymysql.connect(cfg["mysql"]["host"], cfg["mysql"]["user"], cfg["mysql"]["passwd"], cfg["mysql"]["db"])
         try:
             with db.cursor() as cursor:
-                query = "SELECT `notetext`, `timestamp`, `adminckey`, `last_editor` FROM notes WHERE ckey LIKE \'" + ckey + "\'"
+                query = "SELECT `text`, `timestamp`, `adminckey`, `lasteditor` FROM messages WHERE targetckey LIKE \'" + ckey + "\'"
                 cursor.execute(query)
                 result = cursor.fetchall()
                 if result:

@@ -2,7 +2,7 @@ import socket
 
 class Topic:
 
-    def __init__(self, host="localhost", port=3665, key="default_pwd"):
+    def __init__(self, host="byond.oraclestation.com", port=5000, key="default_pwd"):
         self.host = host
         self.port = port
         self.key = key
