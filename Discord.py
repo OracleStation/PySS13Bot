@@ -76,37 +76,22 @@ async def on_message(message):
                 if result:
                     output = "Notes for player " + ckey + "\n\n"
                     for line in result:
-                        output += line[0] + "\n"
+                        if len(output + line) > 2000:
+                            """If the message would be over 2000 characters then output the message and then reset"""
+                            await client.send_message(message.channel. message)
+                            output + ""
+
+                        output += "``` " + line[0] + "\n"
                         output += "added at " + str(line[1]) + " by " + line[2] + "\n\n"
+                        output += "```"
                 else:
                     output = "No results found for " + ckey
 
         finally:
-            trimmed_output = await discord_msg_trim(output)
-            for message in trimmed_output:
-                await client.send_message(message.channel, message)
+            await client.send_message(message.channel, output)
             del(cursor)
             db.close()
 
-
-async def discord_msg_trim(string):
-    """Trims a string to < 2000 character chunks and returns as a list. Formatted with triple ` for discord."""
-    msgs = []
-    if len(string) > 2000:
-        under = string[:1990]
-        msgs.append(under)
-        over = await discord_msg_trim(string[1991:])
-        over = await discord_code_formaticise(over)
-        msgs.append(over)
-    else:
-        string = await discord_code_formaticise(string)
-        msgs.append(string)
-    return msgs
-
-async def discord_code_formaticise(string):
-    """Adds triple ` to input for discord formatting"""
-    string = "```" + string + "```"
-    return string
 
 @client.event
 async def on_ready():
