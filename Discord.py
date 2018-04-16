@@ -76,6 +76,10 @@ async def on_message(message):
                 if result:
                     output = "Notes for player " + ckey + "\n\n"
                     for line in result:
+                        if len(output) >= 1600:
+                            """Discord arbitrary 2000 character limit so a buffer of 400 characters"""
+                            await client.send_message(output)
+                            output = ""
                         output += "``` " + line[0] + "\n"
                         output += "added at " + str(line[1]) + " by " + line[2] + "\n\n"
                         output += "```"
