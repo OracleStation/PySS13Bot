@@ -76,6 +76,11 @@ async def on_message(message):
                 if result:
                     output = "Notes for player " + ckey + "\n\n"
                     for line in result:
+                        if len(output + line) > 2000:
+                            """If the message would be over 2000 characters then output the message and then reset"""
+                            await client.send_message(message.channel. message)
+                            output + ""
+
                         output += "``` " + line[0] + "\n"
                         output += "added at " + str(line[1]) + " by " + line[2] + "\n\n"
                         output += "```"
