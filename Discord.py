@@ -3,6 +3,7 @@ import Topic
 import math
 import pymysql
 import yaml
+from ipaddress import IPv4Address
 from urllib.parse import parse_qs
 
 with open("config/config.yml", "r") as ymlfile:
@@ -125,7 +126,8 @@ async def on_message(message):
         if result:
             output = "Player information for **{0}**:\n\n".format(ckey)
             for line in result:
-                output += "```Join Date: {0}\nFirst Seen: {1}\nLast Seen: {2}\nComputer ID: {3}\nIP: {4}```".format(line[0], line[1], line[2], line[3], line[4])
+                ip = IPv4Address(int(line[4]))
+                output += "```Join Date: {0}\nFirst Seen: {1}\nLast Seen: {2}\nComputer ID: {3}\nIP: {4} ({5})```".format(line[0], line[1], line[2], line[3], ip, line[4])
                 return await client.send_message(message.channel, output)
         else:
             return await client.send_message(message.channel, "No result found for {0}".format(ckey))
